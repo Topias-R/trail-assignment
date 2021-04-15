@@ -96,7 +96,7 @@ type ItineraryState = {
     legs: {
       startTime: number
       endTime: number
-      mode: string
+      mode: 'WALK' | 'BUS' | 'SUBWAY' | 'RAIL' | 'TRAM' | 'FERRY'
       from: {
         lat: number
         long: number
