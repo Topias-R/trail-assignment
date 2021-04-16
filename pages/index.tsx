@@ -164,7 +164,7 @@ export const Index = (): JSX.Element => {
         )}
         <div className={classes.container}>
           {itineraries.map((itinerary, idx) => (
-            <Accordion key={idx} square elevation={3}>
+            <Accordion key={itinerary.startTime} square elevation={3}>
               <Summary aria-controls="">
                 {itinerary.legs.map((leg, idx) => (
                   <div
