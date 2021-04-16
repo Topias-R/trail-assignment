@@ -62,8 +62,8 @@ export default function CustomizedInputBase() {
   const term = useAppSelector((state) => state.search.search.term)
   const address = useAppSelector((state) => state.search.search.address)
 
-  const debouncedSearchTerm: string = useDebounce<string>(term, 750)
-  const debouncedSearchTermLong: string = useDebounce<string>(term, 3000)
+  const debouncedSearchTerm = useDebounce(term, 750)
+  const debouncedAddress = useDebounce(address, 3000)
 
   useEffect(() => {
     if (debouncedSearchTerm) {
@@ -72,10 +72,10 @@ export default function CustomizedInputBase() {
   }, [debouncedSearchTerm])
 
   useEffect(() => {
-    if (debouncedSearchTermLong) {
+    if (debouncedAddress) {
       dispatch(updateTerm(address.name))
     }
-  }, [debouncedSearchTermLong])
+  }, [debouncedAddress])
 
   return (
     <Paper
@@ -94,6 +94,7 @@ export default function CustomizedInputBase() {
           onChange={(e) => {
             dispatch(updateTerm(e.target.value))
           }}
+          onSubmit={(e) => e.currentTarget.blur()}
           value={term}
         />
         <IconButton
