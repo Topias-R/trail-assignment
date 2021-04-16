@@ -141,7 +141,7 @@ const initialState: ItineraryState = {
   itineraries: []
 }
 
-const scheduleSlice = createSlice({
+const itinerarySlice = createSlice({
   name: 'itineraries',
   initialState,
   reducers: {
@@ -161,6 +161,6 @@ const scheduleSlice = createSlice({
 
 export const selectItinerary = (state: CoreState) => state.itineraries
 
-export const { update } = scheduleSlice.actions
+export const { update } = itinerarySlice.actions
 
-export default scheduleSlice.reducer
+export default itinerarySlice.reducer

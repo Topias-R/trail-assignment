@@ -1,7 +1,11 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import itineraryReducer from '../lib/slices/itinerarySlice'
+import searchReducer from '../lib/slices/searchSlice'
 
-const rootReducer = combineReducers({ itineraries: itineraryReducer })
+const rootReducer = combineReducers({
+  itineraries: itineraryReducer,
+  search: searchReducer
+})
 
 export type CoreState = ReturnType<typeof rootReducer>
 

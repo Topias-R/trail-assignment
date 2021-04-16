@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import InputBase from '@material-ui/core/InputBase'
 import Divider from '@material-ui/core/Divider'
 import IconButton from '@material-ui/core/IconButton'
-import useMediaQuery from '@material-ui/core/useMediaQuery'
 import SwapHorizIcon from '@material-ui/icons/SwapHoriz'
+import { useAppDispatch, useAppSelector } from '../lib/hooks'
+import { updateTerm, updateReverse } from '../lib/slices/searchSlice'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -40,7 +41,10 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function CustomizedInputBase() {
   const classes = useStyles()
-  const [reverse, setReverse] = useState(false)
+
+  const dispatch = useAppDispatch()
+  const reverse = useAppSelector((state) => state.search.search.reverse)
+  const term = useAppSelector((state) => state.search.search.term)
 
   return (
     <Paper
@@ -55,13 +59,15 @@ export default function CustomizedInputBase() {
         className={classes.input}
         placeholder={reverse ? 'Destination' : 'Origin'}
         inputProps={{ 'aria-label': reverse ? 'Destination' : 'Origin' }}
+        onChange={(e) => dispatch(updateTerm(e.target.value))}
+        value={term}
       />
       <Divider className={classes.divider} orientation="vertical" />
       <IconButton
         color="primary"
         className={classes.iconButton}
         aria-label="directions"
-        onClick={() => setReverse(!reverse)}
+        onClick={() => dispatch(updateReverse(!reverse))}
       >
         <SwapHorizIcon />
       </IconButton>
