@@ -5,6 +5,7 @@ import InputBase from '@material-ui/core/InputBase'
 import Divider from '@material-ui/core/Divider'
 import IconButton from '@material-ui/core/IconButton'
 import SwapHorizIcon from '@material-ui/icons/SwapHoriz'
+import LocationSearchingIcon from '@material-ui/icons/LocationSearching'
 import { useAppDispatch, useAppSelector, useDebounce } from '../lib/hooks'
 import {
   updateTerm,
@@ -29,12 +30,22 @@ const useStyles = makeStyles((theme: Theme) =>
         borderRadius: 0
       }
     },
+    inputContainer: {
+      position: 'relative',
+      width: '100%'
+    },
     input: {
       marginLeft: theme.spacing(1),
       flex: 1
     },
     iconButton: {
       padding: 10
+    },
+    locationButton: {
+      padding: 10,
+      position: 'absolute',
+      right: '0px',
+      top: '-6px'
     },
     divider: {
       height: 28,
@@ -67,31 +78,43 @@ export default function CustomizedInputBase() {
         flexDirection: reverse ? 'row-reverse' : 'row'
       }}
     >
-      <InputBase
-        className={classes.input}
-        placeholder={reverse ? 'Destination' : 'Origin'}
-        inputProps={{ 'aria-label': reverse ? 'Destination' : 'Origin' }}
-        onChange={(e) => {
-          dispatch(updateTerm(e.target.value))
-        }}
-        value={term}
-      />
+      <div className={classes.inputContainer}>
+        <InputBase
+          className={classes.input}
+          placeholder={reverse ? 'Destination' : 'Origin'}
+          inputProps={{ 'aria-label': reverse ? 'Destination' : 'Origin' }}
+          onChange={(e) => {
+            dispatch(updateTerm(e.target.value))
+          }}
+          value={term}
+        />
+        <IconButton
+          color="primary"
+          className={classes.locationButton}
+          aria-label="locate"
+        >
+          <LocationSearchingIcon />
+        </IconButton>
+      </div>
       <Divider className={classes.divider} orientation="vertical" />
+
       <IconButton
         color="primary"
         className={classes.iconButton}
-        aria-label="directions"
+        aria-label="swap"
         onClick={() => dispatch(updateReverse(!reverse))}
       >
         <SwapHorizIcon />
       </IconButton>
       <Divider className={classes.divider} orientation="vertical" />
-      <InputBase
-        className={classes.input}
-        readOnly
-        value="Maria 01"
-        inputProps={{ 'aria-label': 'Maria 01' }}
-      />
+      <div className={classes.inputContainer}>
+        <InputBase
+          className={classes.input}
+          readOnly
+          value="Maria 01"
+          inputProps={{ 'aria-label': 'Maria 01' }}
+        />
+      </div>
     </Paper>
   )
 }
