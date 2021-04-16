@@ -3,15 +3,17 @@ import { CoreState } from '../../store'
 
 import { request, gql } from 'graphql-request'
 
-interface FetchScheduleArgs {
+interface SchedulesQueryArgs {
   latitude: number
   longitude: number
+  reverse?: boolean
 }
 
-const SchedulesQuery = (
-  { latitude, longitude }: FetchScheduleArgs,
-  reverse = false
-) => {
+const SchedulesQuery = ({
+  latitude,
+  longitude,
+  reverse
+}: SchedulesQueryArgs) => {
   // prettier-ignore
   const from = `{ lat: ${reverse ? 60.16726685101889 : latitude}, lon: ${reverse ? 24.921692418124902 : longitude } }`
   // prettier-ignore
@@ -72,20 +74,16 @@ const SchedulesQuery = (
 `
 }
 
-interface FetchScheduleArgs {
-  latitude: number
-  longitude: number
-}
-
 export const fetchItineraries = createAsyncThunk(
   'schedule/fetchSchedule',
   async ({
     latitude,
-    longitude
-  }: FetchScheduleArgs): Promise<ItineraryState> => {
+    longitude,
+    reverse
+  }: SchedulesQueryArgs): Promise<ItineraryState> => {
     const { plan } = await request(
       'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql',
-      SchedulesQuery({ latitude, longitude })
+      SchedulesQuery({ latitude, longitude, reverse })
     )
     return plan
   }

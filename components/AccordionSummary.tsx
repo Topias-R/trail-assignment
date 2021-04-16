@@ -11,6 +11,8 @@ const AccordionSummary = withStyles({
   expanded: {},
   content: {
     height: '100%',
+    gap: '2px',
+    backgroundColor: 'rgb(0 0 0 / 34%)',
     margin: '0 !important'
   }
 })(MuiAccordionSummary)

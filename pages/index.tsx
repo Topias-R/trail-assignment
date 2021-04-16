@@ -64,6 +64,11 @@ const useStyles = makeStyles((theme) => ({
     padding: '12px 0',
     textAlign: 'center'
   },
+  detailsLegMode: {
+    borderRadius: '4px',
+    padding: '2px 4px',
+    margin: '-2px -4px'
+  },
   time: {
     margin: '8px'
   },
@@ -80,11 +85,17 @@ const useStyles = makeStyles((theme) => ({
 export const Index = (): JSX.Element => {
   const dispatch = useAppDispatch()
   const { itineraries } = useAppSelector((state) => state.itineraries)
+  const reverse = useAppSelector((state) => state.search.search.reverse)
+  const address = useAppSelector((state) => state.search.search.address)
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(({ coords }) => {
-      dispatch(fetchItineraries(coords))
-    })
-  }, [])
+    dispatch(
+      fetchItineraries({
+        latitude: address.coords.latitude,
+        longitude: address.coords.longitude,
+        reverse
+      })
+    )
+  }, [address, reverse])
   const classes = useStyles()
 
   return (
@@ -122,7 +133,7 @@ export const Index = (): JSX.Element => {
                         BUS: 'white',
                         SUBWAY: 'black',
                         RAIL: 'white',
-                        TRAM: 'black',
+                        TRAM: 'white',
                         FERRY: 'black'
                       }[leg.mode]
                     }}
@@ -172,8 +183,37 @@ export const Index = (): JSX.Element => {
                     </div>
                     <div className={classes.trip}>
                       <span>{leg.from.name}</span>
-                      <span>
-                        <em>{leg.trip?.pattern.name || leg.mode}</em>
+                      <span
+                        className={classes.detailsLegMode}
+                        style={{
+                          backgroundColor: {
+                            WALK: 'white',
+                            BUS: 'blue',
+                            SUBWAY: 'orange',
+                            RAIL: 'purple',
+                            TRAM: 'green',
+                            FERRY: 'yellow'
+                          }[leg.mode],
+                          color: {
+                            WALK: 'black',
+                            BUS: 'white',
+                            SUBWAY: 'black',
+                            RAIL: 'white',
+                            TRAM: 'white',
+                            FERRY: 'black'
+                          }[leg.mode]
+                        }}
+                      >
+                        <em>
+                          {leg.trip?.pattern.name
+                            .split(' ')
+                            .filter((word) => {
+                              return !/^\([A-Za-z]+\:[\d]+\)$/.test(word)
+                            })
+                            .join(' ') || (
+                            <DirectionsWalkIcon style={{ fontSize: '100%' }} />
+                          )}
+                        </em>
                       </span>
                       <span>{leg.to.name}</span>
                     </div>

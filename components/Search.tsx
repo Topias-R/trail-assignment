@@ -6,7 +6,11 @@ import Divider from '@material-ui/core/Divider'
 import IconButton from '@material-ui/core/IconButton'
 import SwapHorizIcon from '@material-ui/icons/SwapHoriz'
 import { useAppDispatch, useAppSelector } from '../lib/hooks'
-import { updateTerm, updateReverse } from '../lib/slices/searchSlice'
+import {
+  updateTerm,
+  updateReverse,
+  addressSearch
+} from '../lib/slices/searchSlice'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -59,7 +63,10 @@ export default function CustomizedInputBase() {
         className={classes.input}
         placeholder={reverse ? 'Destination' : 'Origin'}
         inputProps={{ 'aria-label': reverse ? 'Destination' : 'Origin' }}
-        onChange={(e) => dispatch(updateTerm(e.target.value))}
+        onChange={(e) => {
+          dispatch(updateTerm(e.target.value))
+          dispatch(addressSearch({ term: e.target.value }))
+        }}
         value={term}
       />
       <Divider className={classes.divider} orientation="vertical" />

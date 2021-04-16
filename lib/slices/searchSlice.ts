@@ -1,17 +1,63 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { CoreState } from '../../store'
 
 type SearchState = {
   search: {
     term: string
     reverse: boolean
+    address: {
+      name: string
+      coords: {
+        latitude: number
+        longitude: number
+      }
+    }
   }
 }
+
+interface AddressSearchArgs {
+  term: string
+  coords?: {
+    latitude: number
+    longitude: number
+  }
+}
+
+export const addressSearch = createAsyncThunk(
+  'search/addressSearch',
+  async ({
+    term,
+    coords
+  }: AddressSearchArgs): Promise<SearchState['search']['address']> => {
+    const res = await fetch(
+      `https://api.digitransit.fi/geocoding/v1/search?text=${term}&size=1${
+        coords
+          ? `&focus.point.lat=${coords.latitude}&focus.point.lon=${coords.longitude}`
+          : ''
+      }`
+    )
+    const json = await res.json()
+    return {
+      name: json.features[0].properties.label,
+      coords: {
+        latitude: json.features[0].geometry.coordinates[1],
+        longitude: json.features[0].geometry.coordinates[0]
+      }
+    }
+  }
+)
 
 const initialState: SearchState = {
   search: {
     term: '',
-    reverse: false
+    reverse: false,
+    address: {
+      name: '',
+      coords: {
+        latitude: 0,
+        longitude: 0
+      }
+    }
   }
 }
 
@@ -25,6 +71,14 @@ const searchSlice = createSlice({
     updateReverse: (state, action: PayloadAction<boolean>) => {
       state.search.reverse = action.payload
     }
+  },
+  extraReducers: (builder) => {
+    builder.addCase(
+      addressSearch.fulfilled,
+      (state, action: PayloadAction<SearchState['search']['address']>) => {
+        state.search.address = action.payload
+      }
+    )
   }
 })
 
