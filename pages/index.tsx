@@ -13,17 +13,23 @@ import DirectionsSubwayIcon from '@material-ui/icons/DirectionsSubway'
 import TrainIcon from '@material-ui/icons/Train'
 import TramIcon from '@material-ui/icons/Tram'
 import DirectionsBoatIcon from '@material-ui/icons/DirectionsBoat'
+import Search from '../components/Search'
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
     height: '100%',
     display: 'grid',
-    placeItems: 'center'
+    placeItems: 'center',
+    paddingBottom: 0,
+    [theme.breakpoints.down('sm')]: {
+      paddingBottom: '48px'
+    }
   },
   container: {
     height: '100%',
     width: '100%',
+    overflowY: 'auto',
     display: 'flex',
     flexDirection: 'column',
     gap: '2px'
@@ -177,6 +183,7 @@ export const Index = (): JSX.Element => {
             </Accordion>
           ))}
         </div>
+        <Search />
       </Paper>
     </>
   )
