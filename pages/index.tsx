@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     placeItems: 'center',
     paddingBottom: 0,
     [theme.breakpoints.down('sm')]: {
-      paddingBottom: '48px'
+      paddingBottom: '114px'
     }
   },
   container: {
@@ -101,13 +101,15 @@ export const Index = (): JSX.Element => {
   const debouncedReverse: boolean = useDebounce<boolean>(reverse, 750)
 
   useEffect(() => {
-    dispatch(
-      fetchItineraries({
-        latitude: address.coords.latitude,
-        longitude: address.coords.longitude,
-        reverse
-      })
-    )
+    if (address.coords.latitude && address.coords.longitude) {
+      dispatch(
+        fetchItineraries({
+          latitude: address.coords.latitude,
+          longitude: address.coords.longitude,
+          reverse
+        })
+      )
+    }
   }, [address, debouncedReverse])
   const classes = useStyles()
 

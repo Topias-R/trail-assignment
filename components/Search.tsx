@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useRef, useEffect, useReducer } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import InputBase from '@material-ui/core/InputBase'
@@ -12,6 +12,7 @@ import {
   updateReverse,
   addressSearch
 } from '../lib/slices/searchSlice'
+import { useMediaQuery } from '@material-ui/core'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -35,11 +36,17 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '100%'
     },
     input: {
+      textAlign: 'center',
       marginLeft: theme.spacing(1),
-      flex: 1
+      flex: 1,
+      width: '100%'
     },
     iconButton: {
-      padding: 10
+      padding: 10,
+      [theme.breakpoints.down('sm')]: {
+        transform: 'rotate(90deg)',
+        padding: 2
+      }
     },
     locationButton: {
       padding: 10,
@@ -49,13 +56,20 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     divider: {
       height: 28,
-      margin: 4
+      margin: 4,
+      [theme.breakpoints.down('sm')]: {
+        height: 1,
+        width: '100%'
+      }
     }
   })
 )
 
 export default function CustomizedInputBase() {
   const classes = useStyles()
+  const matches = useMediaQuery('(max-width:600px)')
+  const searchBox = useRef<null | HTMLInputElement>(null)
+  const [_, forceUpdate] = useReducer((x) => x + 1, 0)
 
   const dispatch = useAppDispatch()
   const reverse = useAppSelector((state) => state.search.search.reverse)
@@ -63,7 +77,6 @@ export default function CustomizedInputBase() {
   const address = useAppSelector((state) => state.search.search.address)
 
   const debouncedSearchTerm = useDebounce(term, 750)
-  const debouncedAddress = useDebounce(address, 3000)
 
   useEffect(() => {
     if (debouncedSearchTerm) {
@@ -71,19 +84,19 @@ export default function CustomizedInputBase() {
     }
   }, [debouncedSearchTerm])
 
-  useEffect(() => {
-    if (debouncedAddress) {
-      dispatch(updateTerm(address.name))
-    }
-  }, [debouncedAddress])
-
   return (
     <Paper
       component="form"
       elevation={5}
       className={classes.root}
       style={{
-        flexDirection: reverse ? 'row-reverse' : 'row'
+        flexDirection: matches
+          ? reverse
+            ? 'column-reverse'
+            : 'column'
+          : reverse
+          ? 'row-reverse'
+          : 'row'
       }}
     >
       <div className={classes.inputContainer}>
@@ -92,10 +105,19 @@ export default function CustomizedInputBase() {
           placeholder={reverse ? 'Destination' : 'Origin'}
           inputProps={{ 'aria-label': reverse ? 'Destination' : 'Origin' }}
           onChange={(e) => {
-            dispatch(updateTerm(e.target.value))
+            if (document.activeElement === searchBox.current) {
+              dispatch(updateTerm(e.target.value))
+            }
           }}
           onSubmit={(e) => e.currentTarget.blur()}
-          value={term}
+          onBlur={forceUpdate}
+          value={
+            typeof document !== 'undefined' &&
+            document.activeElement === searchBox.current
+              ? term
+              : address.name
+          }
+          inputRef={searchBox}
         />
         <IconButton
           color="primary"
