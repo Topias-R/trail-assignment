@@ -127,11 +127,11 @@ export const Index = (): JSX.Element => {
                         }, 100%)`,
                         backgroundColor: {
                           WALK: 'white',
-                          BUS: 'blue',
-                          SUBWAY: 'orange',
-                          RAIL: 'purple',
-                          TRAM: 'green',
-                          FERRY: 'yellow'
+                          BUS: '#006AFF',
+                          SUBWAY: '#FC833D',
+                          RAIL: '#D543E6',
+                          TRAM: '#009E27',
+                          FERRY: '#F2E53A'
                         }[leg.mode],
                         color: {
                           WALK: 'black',
@@ -197,11 +197,11 @@ export const Index = (): JSX.Element => {
                           style={{
                             backgroundColor: {
                               WALK: 'white',
-                              BUS: 'blue',
-                              SUBWAY: 'orange',
-                              RAIL: 'purple',
-                              TRAM: 'green',
-                              FERRY: 'yellow'
+                              BUS: '#006AFF',
+                              SUBWAY: '#FC833D',
+                              RAIL: '#D543E6',
+                              TRAM: '#009E27',
+                              FERRY: '#F2E53A'
                             }[leg.mode],
                             color: {
                               WALK: 'black',

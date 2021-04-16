@@ -15,9 +15,9 @@ const SchedulesQuery = ({
   reverse
 }: SchedulesQueryArgs) => {
   // prettier-ignore
-  const from = `{ lat: ${reverse ? 60.16726685101889 : latitude}, lon: ${reverse ? 24.921692418124902 : longitude } }`
+  const from = `{ lat: ${reverse ? 60.166947 : latitude}, lon: ${reverse ? 24.921601 : longitude } }`
   // prettier-ignore
-  const to = `{ lat: ${reverse ? latitude : 60.16726685101889}, lon: ${ reverse ? longitude : 24.921692418124902 } }`
+  const to = `{ lat: ${reverse ? latitude : 60.166947}, lon: ${ reverse ? longitude : 24.921601 } }`
   return gql`
   {
     plan(
