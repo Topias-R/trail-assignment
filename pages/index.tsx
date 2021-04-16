@@ -105,123 +105,131 @@ export const Index = (): JSX.Element => {
       </Head>
       <Paper className={classes.root}>
         <div className={classes.container}>
-          {itineraries.map((itinerary, idx) => (
-            <Accordion key={idx} square elevation={3}>
-              <Summary aria-controls="">
-                {itinerary.legs.map((leg, idx) => (
-                  <div
-                    key={idx}
-                    className={classes.summaryLeg}
-                    style={{
-                      width: `clamp(20%, ${
-                        ((leg.endTime - leg.startTime) /
-                          (itinerary.legs[itinerary.legs.length - 1].endTime -
-                            itinerary.legs[0].startTime)) *
-                          100 +
-                        '%'
-                      }, 100%)`,
-                      backgroundColor: {
-                        WALK: 'white',
-                        BUS: 'blue',
-                        SUBWAY: 'orange',
-                        RAIL: 'purple',
-                        TRAM: 'green',
-                        FERRY: 'yellow'
-                      }[leg.mode],
-                      color: {
-                        WALK: 'black',
-                        BUS: 'white',
-                        SUBWAY: 'black',
-                        RAIL: 'white',
-                        TRAM: 'white',
-                        FERRY: 'black'
-                      }[leg.mode]
-                    }}
-                  >
-                    <em className={classes.leftTimeStamp}>
-                      {new Date(leg.startTime).toLocaleString([], {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: false
-                      })}
-                    </em>
-                    <em className={classes.rightTimeStamp}>
-                      {new Date(leg.endTime).toLocaleString([], {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: false
-                      })}
-                    </em>
-                    {
+          {[...itineraries]
+            .sort((a, b) => a.startTime - b.startTime)
+            .map((itinerary, idx) => (
+              <Accordion key={idx} square elevation={3}>
+                <Summary aria-controls="">
+                  {itinerary.legs.map((leg, idx) => (
+                    <div
+                      key={idx}
+                      className={classes.summaryLeg}
+                      style={{
+                        width: `clamp(20%, ${
+                          ((leg.endTime - leg.startTime) /
+                            (itinerary.legs[itinerary.legs.length - 1].endTime -
+                              itinerary.legs[0].startTime)) *
+                            100 +
+                          '%'
+                        }, 100%)`,
+                        backgroundColor: {
+                          WALK: 'white',
+                          BUS: 'blue',
+                          SUBWAY: 'orange',
+                          RAIL: 'purple',
+                          TRAM: 'green',
+                          FERRY: 'yellow'
+                        }[leg.mode],
+                        color: {
+                          WALK: 'black',
+                          BUS: 'white',
+                          SUBWAY: 'black',
+                          RAIL: 'white',
+                          TRAM: 'white',
+                          FERRY: 'black'
+                        }[leg.mode]
+                      }}
+                    >
+                      <em className={classes.leftTimeStamp}>
+                        {new Date(leg.startTime).toLocaleString([], {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                          hour12: false
+                        })}
+                      </em>
+                      <em className={classes.rightTimeStamp}>
+                        {new Date(leg.endTime).toLocaleString([], {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                          hour12: false
+                        })}
+                      </em>
                       {
-                        WALK: <DirectionsWalkIcon />,
-                        BUS: <DirectionsBusIcon />,
-                        SUBWAY: <DirectionsSubwayIcon />,
-                        RAIL: <TrainIcon />,
-                        TRAM: <TramIcon />,
-                        FERRY: <DirectionsBoatIcon />
-                      }[leg.mode]
-                    }
-                  </div>
-                ))}
-              </Summary>
-              <Details className={classes.details}>
-                {itinerary.legs.map((leg, idx) => (
-                  <Paper elevation={2} key={idx} className={classes.detailsLeg}>
-                    <div className={classes.time}>
-                      {new Date(leg.startTime).toLocaleString([], {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: false
-                      })}
-                      &nbsp;-&nbsp;
-                      {new Date(leg.endTime).toLocaleString([], {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: false
-                      })}
+                        {
+                          WALK: <DirectionsWalkIcon />,
+                          BUS: <DirectionsBusIcon />,
+                          SUBWAY: <DirectionsSubwayIcon />,
+                          RAIL: <TrainIcon />,
+                          TRAM: <TramIcon />,
+                          FERRY: <DirectionsBoatIcon />
+                        }[leg.mode]
+                      }
                     </div>
-                    <div className={classes.trip}>
-                      <span>{leg.from.name}</span>
-                      <span
-                        className={classes.detailsLegMode}
-                        style={{
-                          backgroundColor: {
-                            WALK: 'white',
-                            BUS: 'blue',
-                            SUBWAY: 'orange',
-                            RAIL: 'purple',
-                            TRAM: 'green',
-                            FERRY: 'yellow'
-                          }[leg.mode],
-                          color: {
-                            WALK: 'black',
-                            BUS: 'white',
-                            SUBWAY: 'black',
-                            RAIL: 'white',
-                            TRAM: 'white',
-                            FERRY: 'black'
-                          }[leg.mode]
-                        }}
-                      >
-                        <em>
-                          {leg.trip?.pattern.name
-                            .split(' ')
-                            .filter((word) => {
-                              return !/^\([A-Za-z]+\:[\d]+\)$/.test(word)
-                            })
-                            .join(' ') || (
-                            <DirectionsWalkIcon style={{ fontSize: '100%' }} />
-                          )}
-                        </em>
-                      </span>
-                      <span>{leg.to.name}</span>
-                    </div>
-                  </Paper>
-                ))}
-              </Details>
-            </Accordion>
-          ))}
+                  ))}
+                </Summary>
+                <Details className={classes.details}>
+                  {itinerary.legs.map((leg, idx) => (
+                    <Paper
+                      elevation={2}
+                      key={idx}
+                      className={classes.detailsLeg}
+                    >
+                      <div className={classes.time}>
+                        {new Date(leg.startTime).toLocaleString([], {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                          hour12: false
+                        })}
+                        &nbsp;-&nbsp;
+                        {new Date(leg.endTime).toLocaleString([], {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                          hour12: false
+                        })}
+                      </div>
+                      <div className={classes.trip}>
+                        <span>{leg.from.name}</span>
+                        <span
+                          className={classes.detailsLegMode}
+                          style={{
+                            backgroundColor: {
+                              WALK: 'white',
+                              BUS: 'blue',
+                              SUBWAY: 'orange',
+                              RAIL: 'purple',
+                              TRAM: 'green',
+                              FERRY: 'yellow'
+                            }[leg.mode],
+                            color: {
+                              WALK: 'black',
+                              BUS: 'white',
+                              SUBWAY: 'black',
+                              RAIL: 'white',
+                              TRAM: 'white',
+                              FERRY: 'black'
+                            }[leg.mode]
+                          }}
+                        >
+                          <em>
+                            {leg.trip?.pattern.name
+                              .split(' ')
+                              .filter((word) => {
+                                return !/^\([A-Za-z]+\:[\d]+\)$/.test(word)
+                              })
+                              .join(' ') || (
+                              <DirectionsWalkIcon
+                                style={{ fontSize: '100%' }}
+                              />
+                            )}
+                          </em>
+                        </span>
+                        <span>{leg.to.name}</span>
+                      </div>
+                    </Paper>
+                  ))}
+                </Details>
+              </Accordion>
+            ))}
         </div>
         <Search />
       </Paper>

@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import InputBase from '@material-ui/core/InputBase'
 import Divider from '@material-ui/core/Divider'
 import IconButton from '@material-ui/core/IconButton'
 import SwapHorizIcon from '@material-ui/icons/SwapHoriz'
-import { useAppDispatch, useAppSelector } from '../lib/hooks'
+import { useAppDispatch, useAppSelector, useDebounce } from '../lib/hooks'
 import {
   updateTerm,
   updateReverse,
@@ -50,6 +50,14 @@ export default function CustomizedInputBase() {
   const reverse = useAppSelector((state) => state.search.search.reverse)
   const term = useAppSelector((state) => state.search.search.term)
 
+  const debouncedSearchTerm: string = useDebounce<string>(term, 750)
+
+  useEffect(() => {
+    if (debouncedSearchTerm) {
+      dispatch(addressSearch({ term: debouncedSearchTerm })).then()
+    }
+  }, [debouncedSearchTerm])
+
   return (
     <Paper
       component="form"
@@ -65,7 +73,6 @@ export default function CustomizedInputBase() {
         inputProps={{ 'aria-label': reverse ? 'Destination' : 'Origin' }}
         onChange={(e) => {
           dispatch(updateTerm(e.target.value))
-          dispatch(addressSearch({ term: e.target.value }))
         }}
         value={term}
       />

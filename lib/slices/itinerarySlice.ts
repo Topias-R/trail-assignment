@@ -26,6 +26,7 @@ const SchedulesQuery = ({
       numItineraries: 10
     ) {
       itineraries {
+        startTime
         legs {
           mode
           startTime
@@ -91,6 +92,7 @@ export const fetchItineraries = createAsyncThunk(
 
 type ItineraryState = {
   itineraries: {
+    startTime: number
     legs: {
       startTime: number
       endTime: number
