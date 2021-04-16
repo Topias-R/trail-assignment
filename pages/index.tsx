@@ -173,8 +173,10 @@ export const Index = (): JSX.Element => {
                     style={{
                       width: `clamp(20%, ${
                         ((leg.endTime - leg.startTime) /
-                          (itinerary.legs[itinerary.legs.length - 1].endTime -
-                            itinerary.legs[0].startTime)) *
+                          itinerary.legs.reduce(
+                            (acc, leg) => acc + (leg.endTime - leg.startTime),
+                            0
+                          )) *
                           100 +
                         '%'
                       }, 100%)`,
