@@ -257,7 +257,7 @@ export const Index = (): JSX.Element => {
                           color: {
                             WALK: 'black',
                             BUS: 'white',
-                            SUBWAY: 'black',
+                            SUBWAY: 'white',
                             RAIL: 'white',
                             TRAM: 'white',
                             FERRY: 'black'
