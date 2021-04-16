@@ -64,10 +64,19 @@ const useStyles = makeStyles((theme) => ({
     padding: '12px 0',
     textAlign: 'center'
   },
+  detailsLegFromTo: {
+    border: '1px solid grey',
+    borderRadius: '4px',
+    padding: '2px 4px',
+    margin: '-2px 0px'
+  },
   detailsLegMode: {
     borderRadius: '4px',
     padding: '2px 4px',
-    margin: '-2px -4px'
+    margin: '-2px -4px',
+    [theme.breakpoints.down('sm')]: {
+      margin: '-2px 0px'
+    }
   },
   time: {
     margin: '8px'
@@ -143,7 +152,7 @@ export const Index = (): JSX.Element => {
                         color: {
                           WALK: 'black',
                           BUS: 'white',
-                          SUBWAY: 'black',
+                          SUBWAY: 'white',
                           RAIL: 'white',
                           TRAM: 'white',
                           FERRY: 'black'
@@ -198,7 +207,9 @@ export const Index = (): JSX.Element => {
                         })}
                       </div>
                       <div className={classes.trip}>
-                        <span>{leg.from.name}</span>
+                        <span className={classes.detailsLegFromTo}>
+                          {leg.from.name}
+                        </span>
                         <span
                           className={classes.detailsLegMode}
                           style={{
@@ -233,7 +244,9 @@ export const Index = (): JSX.Element => {
                             )}
                           </em>
                         </span>
-                        <span>{leg.to.name}</span>
+                        <span className={classes.detailsLegFromTo}>
+                          {leg.to.name}
+                        </span>
                       </div>
                     </Paper>
                   ))}
