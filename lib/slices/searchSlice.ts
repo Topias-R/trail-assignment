@@ -40,7 +40,7 @@ export const addressSearch = createAsyncThunk(
       )
     } else if (coords) {
       res = fetch(
-        `http://api.digitransit.fi/geocoding/v1/reverse?point.lat=${coords.latitude}&point.lon=${coords.longitude}&size=1`
+        `https://api.digitransit.fi/geocoding/v1/reverse?point.lat=${coords.latitude}&point.lon=${coords.longitude}&size=1`
       )
     } else {
       throw new Error('Nothing to search with')
@@ -86,7 +86,6 @@ const searchSlice = createSlice({
       addressSearch.fulfilled,
       (state, action: PayloadAction<SearchState['search']['address']>) => {
         state.search.address = action.payload
-        state.search.term = action.payload.name
       }
     )
   }

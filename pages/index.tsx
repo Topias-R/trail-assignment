@@ -87,6 +87,7 @@ export const Index = (): JSX.Element => {
   const { itineraries } = useAppSelector((state) => state.itineraries)
   const reverse = useAppSelector((state) => state.search.search.reverse)
   const address = useAppSelector((state) => state.search.search.address)
+  const term = useAppSelector((state) => state.search.search.term)
 
   const debouncedReverse: boolean = useDebounce<boolean>(reverse, 750)
 
@@ -104,12 +105,8 @@ export const Index = (): JSX.Element => {
   return (
     <>
       <Head>
-        {reverse && (
-          <title>Maria 01{address.name ? ' - ' + address.name : ''}</title>
-        )}
-        {!reverse && (
-          <title>{address.name ? address.name + ' - ' : ''}Maria 01</title>
-        )}
+        {reverse && <title>Maria 01{term ? ' - ' + term : ''}</title>}
+        {!reverse && <title>{term ? term + ' - ' : ''}Maria 01</title>}
       </Head>
       <Paper className={classes.root}>
         {!itineraries.length && (

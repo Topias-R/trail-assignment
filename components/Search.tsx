@@ -63,12 +63,19 @@ export default function CustomizedInputBase() {
   const address = useAppSelector((state) => state.search.search.address)
 
   const debouncedSearchTerm: string = useDebounce<string>(term, 750)
+  const debouncedSearchTermLong: string = useDebounce<string>(term, 3000)
 
   useEffect(() => {
     if (debouncedSearchTerm) {
       dispatch(addressSearch({ term: debouncedSearchTerm }))
     }
   }, [debouncedSearchTerm])
+
+  useEffect(() => {
+    if (debouncedSearchTermLong) {
+      dispatch(updateTerm(address.name))
+    }
+  }, [debouncedSearchTermLong])
 
   return (
     <Paper
