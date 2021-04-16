@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { useEffect } from 'react'
 import { fetchItineraries } from '../lib/slices/itinerarySlice'
-import { useAppDispatch, useAppSelector } from '../lib/hooks'
+import { useAppDispatch, useAppSelector, useDebounce } from '../lib/hooks'
 import Accordion from '../components/Accordion'
 import Details from '../components/AccordionDetails'
 import Summary from '../components/AccordionSummary'
@@ -87,6 +87,9 @@ export const Index = (): JSX.Element => {
   const { itineraries } = useAppSelector((state) => state.itineraries)
   const reverse = useAppSelector((state) => state.search.search.reverse)
   const address = useAppSelector((state) => state.search.search.address)
+
+  const debouncedReverse: boolean = useDebounce<boolean>(reverse, 750)
+
   useEffect(() => {
     dispatch(
       fetchItineraries({
@@ -95,7 +98,7 @@ export const Index = (): JSX.Element => {
         reverse
       })
     )
-  }, [address, reverse])
+  }, [address, debouncedReverse])
   const classes = useStyles()
 
   return (
