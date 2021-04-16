@@ -16,7 +16,7 @@ type SearchState = {
 }
 
 interface AddressSearchArgs {
-  term: string
+  term?: string
   coords?: {
     latitude: number
     longitude: number
@@ -29,14 +29,23 @@ export const addressSearch = createAsyncThunk(
     term,
     coords
   }: AddressSearchArgs): Promise<SearchState['search']['address']> => {
-    const res = await fetch(
-      `https://api.digitransit.fi/geocoding/v1/search?text=${term}&size=1${
-        coords
-          ? `&focus.point.lat=${coords.latitude}&focus.point.lon=${coords.longitude}`
-          : ''
-      }`
-    )
-    const json = await res.json()
+    let res
+    if (term && coords) {
+      res = fetch(
+        `https://api.digitransit.fi/geocoding/v1/search?text=${term}&size=1&focus.point.lat=${coords.latitude}&focus.point.lon=${coords.longitude}`
+      )
+    } else if (term) {
+      res = fetch(
+        `https://api.digitransit.fi/geocoding/v1/search?text=${term}&size=1`
+      )
+    } else if (coords) {
+      res = fetch(
+        `http://api.digitransit.fi/geocoding/v1/reverse?point.lat=${coords.latitude}&point.lon=${coords.longitude}&size=1`
+      )
+    } else {
+      throw new Error('Nothing to search with')
+    }
+    const json = await (await res).json()
     return {
       name: json.features[0].properties.label,
       coords: {
@@ -77,6 +86,7 @@ const searchSlice = createSlice({
       addressSearch.fulfilled,
       (state, action: PayloadAction<SearchState['search']['address']>) => {
         state.search.address = action.payload
+        state.search.term = action.payload.name
       }
     )
   }

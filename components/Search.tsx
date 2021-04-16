@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: '2px 4px',
       display: 'flex',
       alignItems: 'center',
-      width: 500,
+      width: 800,
       borderRadius: '4px 4px 0 0',
       [theme.breakpoints.down('sm')]: {
         width: '100%',
@@ -60,12 +60,13 @@ export default function CustomizedInputBase() {
   const dispatch = useAppDispatch()
   const reverse = useAppSelector((state) => state.search.search.reverse)
   const term = useAppSelector((state) => state.search.search.term)
+  const address = useAppSelector((state) => state.search.search.address)
 
   const debouncedSearchTerm: string = useDebounce<string>(term, 750)
 
   useEffect(() => {
     if (debouncedSearchTerm) {
-      dispatch(addressSearch({ term: debouncedSearchTerm })).then()
+      dispatch(addressSearch({ term: debouncedSearchTerm }))
     }
   }, [debouncedSearchTerm])
 
@@ -92,6 +93,11 @@ export default function CustomizedInputBase() {
           color="primary"
           className={classes.locationButton}
           aria-label="locate"
+          onClick={() => {
+            navigator.geolocation.getCurrentPosition(({ coords }) => {
+              dispatch(addressSearch({ coords }))
+            })
+          }}
         >
           <LocationSearchingIcon />
         </IconButton>
