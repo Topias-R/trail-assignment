@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector, useDebounce } from '../lib/hooks'
 import Accordion from '../components/Accordion'
 import Details from '../components/AccordionDetails'
 import Summary from '../components/AccordionSummary'
-import { Paper } from '@material-ui/core'
+import { Paper, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import DirectionsWalkIcon from '@material-ui/icons/DirectionsWalk'
 import DirectionsBusIcon from '@material-ui/icons/DirectionsBus'
@@ -104,9 +104,19 @@ export const Index = (): JSX.Element => {
   return (
     <>
       <Head>
-        <title>Trail-Assignment</title>
+        {reverse && (
+          <title>Maria 01{address.name ? ' - ' + address.name : ''}</title>
+        )}
+        {!reverse && (
+          <title>{address.name ? address.name + ' - ' : ''}Maria 01</title>
+        )}
       </Head>
       <Paper className={classes.root}>
+        {!itineraries.length && (
+          <Typography align="center" variant="h2" component="h1">
+            Type your address below
+          </Typography>
+        )}
         <div className={classes.container}>
           {[...itineraries]
             .sort((a, b) => a.startTime - b.startTime)
