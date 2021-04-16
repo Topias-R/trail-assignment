@@ -144,7 +144,7 @@ export const Index = (): JSX.Element => {
       </Head>
       <Paper className={classes.root}>
         {fetching && <CircularProgress className={classes.progress} />}
-        {!fetching && !itineraries.length && (
+        {!itineraries.length && (
           <>
             <Typography align="center" variant="h2" component="h1">
               Enter your address
